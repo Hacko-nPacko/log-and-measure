@@ -22,6 +22,55 @@ logging.level.<package>=MY_LEVEL
 logging.level.<class_FQDN>=MY_LEVEL
 ```
 
+3) In the spirit of spring cloud and distributed applications, a central place to save logs is needed. There're solutions, but here I'll discuss `sentry.io` and syslog. Sentry is an online servive that will accumulate and save your logs in a useful way. Integrating with the service is rather easy when using logback:
+- Add the sentry dependency
+```xml
+    <dependency>
+        <groupId>com.getsentry.raven</groupId>
+        <artifactId>raven-logback</artifactId>
+        <version>8.0.2</version>
+    </dependency>
+```
+
+- a special `logback.xml` is required that will define appenders for SENTRY and SYSLOG
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+    <springProperty scope="context" name="appPort" source="server.port"/>
+    <springProperty scope="context" name="appEnv" source="metrics.env"/>
+
+    <appender name="SENTRY" class="com.getsentry.raven.logback.SentryAppender">
+        <dsn>SENTRY_DSN</dsn>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+    <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>SYSLOG_SERVER_HOST</syslogHost>
+        <facility>SYSLOG</facility>
+        <port>514</port>
+        <suffixPattern>[${appName}:${appPort}:${appEnv}] ${FILE_LOG_PATTERN}</suffixPattern>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="SYSLOG" />
+        <appender-ref ref="SENTRY" />
+    </root>
+
+</configuration>
+ ```
+_If you don't want to log to sentry or syslog during dev, you can rename this config `logback-cloud.xml`, then add configuration in your properties:
+```properties
+logging.config=classpath:logback-cloud.xml 
+```
+checkout the `application-cloud.properties` (this property file will be activated only when the `cloud` profile is active)
+
 ### But how do we log everything? - aspectj comes to the rescue
 
 1. Add the aop dependency in the pom.xml
