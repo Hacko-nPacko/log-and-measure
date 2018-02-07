@@ -22,7 +22,7 @@ logging.level.<package>=MY_LEVEL
 logging.level.<class_FQDN>=MY_LEVEL
 ```
 
-3) In the spirit of spring cloud and distributed applications, a central place to save logs is needed. There're solutions, but here I'll discuss `sentry.io` and syslog. Sentry is an online servive that will accumulate and save your logs in a useful way. Integrating with the service is rather easy when using logback:
+3) In the spirit of spring cloud and distributed applications, a central place to save logs is needed. There're solutions, but here I'll discuss `sentry.io` and syslog. [Sentry.io](http://www.sentry.io) is an online service that will accumulate and save your logs in a useful way. Integrating with the service is rather easy when using logback:
 - Add the sentry dependency
 ```xml
     <dependency>
