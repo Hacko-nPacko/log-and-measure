@@ -22,7 +22,8 @@ logging.level.<package>=MY_LEVEL
 logging.level.<class_FQDN>=MY_LEVEL
 ```
 
-3) In the spirit of spring cloud and distributed applications, a central place to save logs is needed. There're solutions, but here I'll discuss `sentry.io` and syslog. [Sentry.io](http://www.sentry.io) is an online service that will accumulate and save your logs in a useful way. Integrating with the service is rather easy when using logback:
+3) In the spirit of spring cloud and distributed applications, a central place to save logs is needed. There're solutions, but here I'll discuss `sentry.io` and syslog. [Sentry.io](http://www.sentry.io) is an online service that will accumulate and save your logs in a useful way. Integrating with the service is rather easy when using 
+:
 - Add the sentry dependency
 ```xml
     <dependency>
@@ -32,7 +33,8 @@ logging.level.<class_FQDN>=MY_LEVEL
     </dependency>
 ```
 
-- a special `logback.xml` is required that will define appenders for SENTRY and SYSLOG
+- a special `logback.xml` is required that will define appenders for SENTRY and SYSLOG:
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
@@ -74,6 +76,7 @@ checkout the `application-cloud.properties` (this property file will be activate
 ### But how do we log everything? - aspectj comes to the rescue
 
 1. Add the aop dependency in the pom.xml
+
 ```xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -133,6 +136,7 @@ example logs:
 
 We can do application monitoring in many ways, but here we'll take a look on how we do it with actuator, statsd, graphite & grafana
 1) Add the actuator dependency 
+
 ```xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -143,6 +147,7 @@ We can do application monitoring in many ways, but here we'll take a look on how
 2) Teach `spring-boot` how to submit metrics to statsd
 
 - Add the dependencies
+
 ```xml
 <dependency>
     <groupId>com.timgroup</groupId>
