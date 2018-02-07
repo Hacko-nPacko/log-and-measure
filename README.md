@@ -140,7 +140,7 @@ We can do application monitoring in many ways, but here we'll take a look on how
 </dependency>
 ```
 
-2) Teach spring boot submit to statsd
+2) Teach `spring-boot` how to submit metrics to statsd
 
 - Add the dependencies
 ```xml
